@@ -1,4 +1,5 @@
-name: Publish docs via GitHub Pages
+name: Publish docs and ARM templates via GitHub Pages
+
 on:
   push:
     branches:
@@ -6,17 +7,34 @@ on:
 
 jobs:
   build:
-    name: Deploy docs
+    name: Deploy docs and ARM templates
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout main
         uses: actions/checkout@v4
 
+      # Step 2: Set up Bicep CLI (if needed)
+      - name: Install Bicep CLI
+        run: |
+          az version || curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az bicep install
+          az bicep version
+
+      # Step 3: Build the Bicep files into ARM templates
+      - name: Build Bicep files
+        run: |
+          mkdir -p site/assets/arm-templates
+          for file in $(find ./workshop/bicep -name '*.bicep'); do
+            output_file=site/assets/arm-templates/$(basename "$file" .bicep).json
+            az bicep build --file "$file" --outfile "$output_file"
+          done
+
+      # Step 4: Deploy docs and ARM templates to GitHub Pages
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFIG_FILE: mkdocs.yml
