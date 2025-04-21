@@ -1,13 +1,9 @@
-# Getting Started
+# Getting Started for BUILD 2025
 
 
-1.  Open a new tab to [Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/get-started/classic?tabs=azurecli).  You can [click here](https://shell.azure.com/).
+1.  Open a new tab to [Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/get-started/classic?tabs=azurecli).  You can [click here](https://shell.azure.com/).  Be sure to select Bash (NOT Powershell)
 
-1. Clone the repo: `git clone -b build-2025 --single-branch https://github.com/azure/aks-ctf.git && cd aks-ctf/workshop`
-
-1. Enable the AKS Resource Provider:
-  1. `az provider register --namespace Microsoft.OperationsManagement`
-  1. `az provider register --namespace Microsoft.ContainerService`
+1. Clone the repo: `git clone https://github.com/azure/aks-ctf.git && cd aks-ctf/workshop`
 
 1. Once inside the Cloud Shell terminal, run setup.sh. This should create a new Project with a single-node Kubernetes cluster that contains the prerequisites for the workshop:
     ```console
