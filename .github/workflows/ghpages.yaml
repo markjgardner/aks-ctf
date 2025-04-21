@@ -26,9 +26,9 @@ jobs:
       # Step 3: Build the Bicep files into ARM templates
       - name: Build Bicep files
         run: |
-          mkdir -p site/assets/arm-templates
+          mkdir -p docs/assets/arm-templates
           for file in $(find ./workshop/bicep -name '*.bicep'); do
-            output_file=site/assets/arm-templates/$(basename "$file" .bicep).json
+            output_file=docs/assets/arm-templates/$(basename "$file" .bicep).json
             az bicep build --file "$file" --outfile "$output_file"
           done
 
