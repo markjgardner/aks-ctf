@@ -47,6 +47,6 @@ spec:
       hostPID: true
 EOF
 
-kubectl wait -n dev --for=condition=complete job/bitcoin-injector
+kubectl wait -n dev --for=condition=complete job/bitcoin-injector --timeout=60s
 
 #kubectl run bitcoin-injector --restart=Never -ti --rm --image lol --overrides '{"spec":{"hostPID": true, "containers":[{"name":"1","image":"docker.io/lastcoolnameleft/bitcoin-injector:latest","command":["/bin/bash"],"stdin": true,"tty":true,"imagePullPolicy":"IfNotPresent","securityContext":{"privileged":true}}]}}'
