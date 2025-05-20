@@ -55,6 +55,10 @@ kubectl get pods --all-namespaces -o jsonpath="{..image}" | tr -s '[[:space:]]' 
 ### Confirming the Foreign Workload
 
 __Blue__ sends a message back to the developers asking for confirmation of the suspicious `bitcoinero` image, and they all agree they don't know who created the `deployment`. __Blue__ looks at the audit logs for the AKS cluster in the Azure Portal.
+
+!!!note "Note"
+    You may need to [change from *Simple Mode* to *KQL Mode*](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-simple-mode#switch-modes) in your Log Analytics Workspace
+
 ```kql
 AKSAuditAdmin
 | where RequestUri startswith "/apis/apps/v1/namespaces/dev/" 
@@ -83,6 +87,8 @@ MY_PUBLIC_IP=$(curl -s ifconfig.me)
 az aks update -n $AKS_NAME -g $RESOURCE_GROUP \
     --api-server-authorized-ip-ranges $MY_PUBLIC_IP/32
 ```
+!!!tip Tip
+    The above command takes about 3-5 minutes.
 
 ### Giving the "All Clear"
 

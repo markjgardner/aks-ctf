@@ -4,7 +4,7 @@ Welcome to the Attacking and Defending Azure Kubernetes Service Clusters.  This 
 
 ## Getting Started
 
-Click on [Getting Started](azure/) in the table of contents and follow the directions.
+Click on [Getting Started](getting_started/) in the table of contents and follow the directions.
 
 ## About the Creators
 
